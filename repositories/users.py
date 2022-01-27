@@ -1,25 +1,19 @@
-from sqlalchemy import select
+from typing import Optional
 
-from models.users import User
-from repositories.base import async_add, async_execute
-from schemas.users import UserIn
+from models import User
+from repositories.base import BaseRepository
 
 
-class UsersRepository():
-    @async_add
-    def create(self, user: UserIn):
-        return User(
-            username=user.username
-        )
+class UsersRepository(BaseRepository[User]):
+    def __init__(self):
+        super(UsersRepository, self).__init__(User)
 
-    @async_execute(one=False)
-    def list(self, limit: int, offset: int):
-        return select(User).limit(limit).offset(offset)
+    async def create(self, user: User) -> None:
+        async with self.session.begin():
+            self.session.add(user)
+        return None
 
-    @async_execute(one=True)
-    def retrieve_by_id(self, user_id: int):
-        return select(User).filter(User.id == user_id)
-
-    @async_execute(one=True)
-    def retrieve_by_username(self, username: str):
-        return select(User).filter(User.username == username)
+    async def update(self, id: int, username: Optional[str] = None) -> None:
+        db_user = (await self.get_all_where(id=id))[0]
+        if username is not None:
+            db_user.username = username
