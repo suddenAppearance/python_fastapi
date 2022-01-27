@@ -46,6 +46,8 @@ uvloop = "^0.16.0"
 watchgod = "^0.7"
 websockets = "^10.1"
 zipp = "^3.7.0"
+bcrypt = "^3.2.0"
+PyJWT = "^2.3.0"
 
 [tool.poetry.dev-dependencies]
 
