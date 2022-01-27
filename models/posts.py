@@ -13,4 +13,4 @@ class Post(Base):
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
 
-    user = relationship("User", back_populates="posts")
+    user = relationship("User", back_populates="posts", lazy="selectin")

@@ -10,4 +10,5 @@ class User(Base):
     id = Column(Integer, autoincrement=True, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
 
-    posts = relationship("Post", back_populates="user")
+    # selectin is used as it has no async query fetching problems with Pydantic nested models
+    posts = relationship("Post", back_populates="user", lazy="selectin")
