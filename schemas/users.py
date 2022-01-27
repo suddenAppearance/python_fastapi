@@ -9,9 +9,11 @@ class BaseUser(BaseModel):
 
 class DBUser(BaseUser):
     id: Optional[int] = None
+    password_hash: Optional[str] = Field(None, alias="password")
 
     class Config:
         orm_mode = True
+        allow_population_by_field_name = True
 
 
 class DBUserUpdate(BaseModel):
@@ -23,4 +25,5 @@ class UserOut(BaseUser):
 
 
 class UserIn(BaseUser):
+    password: str
     pass
