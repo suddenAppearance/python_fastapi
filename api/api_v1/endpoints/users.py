@@ -1,7 +1,8 @@
 from typing import List, Optional
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from api.api_v1.deps import get_current_user
 from schemas.users import DBUser, UserOut, UserIn, DBUserUpdate
 from services.users import UsersService
 
@@ -21,7 +22,12 @@ async def create_user(user: UserIn) -> None:
         await service.create(user)
 
 
-@router.get("/{id}/", response_model=Optional[UserOut])
+@router.get("/me/", response_model=UserOut)
+async def get_current_user(user: DBUser = Depends(get_current_user)):
+    return user
+
+
+@router.get("/{id}/", response_model=UserOut)
 async def get_user(id: int) -> Optional[DBUser]:
     async with UsersService() as service:
         return await service.get_by_id(id)
