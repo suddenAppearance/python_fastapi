@@ -12,7 +12,7 @@ services:
     build: .
     command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
     volumes:
-      - .:/code
+      - .:/app
     env_file:
       - .env
     ports:
@@ -21,7 +21,7 @@ services:
       - db
 
   pgadmin:
-    container_name: pgadmin
+    container_name: pgadmin4
     image: dpage/pgadmin4
     environment:
       - PGADMIN_DEFAULT_EMAIL=postgres@postgres.com
