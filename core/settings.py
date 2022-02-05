@@ -6,3 +6,5 @@ class Settings:
     DATABASE_URL_ASYNC = os.getenv("DATABASE_URL_ASYNC")
     SECRET_KEY = os.getenv("SECRET_KEY")
     JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
+
+    MEDIA_ROOT = "files/"

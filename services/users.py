@@ -1,8 +1,13 @@
+import binascii
+from os import urandom
+
+from fastapi import UploadFile, HTTPException
 from passlib.hash import bcrypt
 
+from core import get_settings
 from models import User
 from repositories.users import UsersRepository
-from schemas.users import DBUser, DBUserUpdate
+from schemas.users import DBUser, UserUpdate
 from services.base import BaseService
 
 
@@ -39,5 +44,25 @@ class UsersService(BaseService[User, DBUser]):
         db_user = User(username=user.username, password_hash=self.hash_password(password=user.password_hash))
         return await self.repo.create(db_user)
 
-    async def update(self, id: int, user: DBUserUpdate):
+    async def update(self, id: int, user: UserUpdate):
         return await self.repo.update(id, username=user.username)
+
+    async def upload_avatar(self, user_id: int, image: UploadFile):
+        allowed_extensions = ['.jpg', '.jpeg', '.png']
+
+        extension = None
+
+        for ext in allowed_extensions:
+            if image.filename.endswith(ext):
+                extension = ext
+                break
+
+        if extension is None:
+            raise HTTPException(status_code=400, detail="Unsupported image format")
+
+        image.filename = binascii.hexlify(urandom(16)).decode() + extension
+
+        with open(get_settings().MEDIA_ROOT + image.filename, 'wb') as f:
+            f.write(await image.read())
+
+        return await self.repo.update(user_id, avatar=image.filename)

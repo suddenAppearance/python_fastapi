@@ -8,8 +8,11 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, autoincrement=True, primary_key=True, index=True)
+
     username = Column(String, unique=True, index=True)
     password_hash = Column(String)
+
+    avatar = Column(String, unique=True, index=True, nullable=True)
 
     # selectin is used as it has no async query fetching problems with Pydantic nested models
     posts = relationship("Post", back_populates="user", lazy="selectin")

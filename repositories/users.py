@@ -13,7 +13,10 @@ class UsersRepository(BaseRepository[User]):
             self.session.add(user)
         return None
 
-    async def update(self, id: int, username: Optional[str] = None) -> None:
+    async def update(self, id: int, username: Optional[str] = None, avatar: Optional[str] = None) -> None:
         db_user = (await self.get_all_where(id=id))[0]
         if username is not None:
             db_user.username = username
+
+        if avatar is not None:
+            db_user.avatar = avatar

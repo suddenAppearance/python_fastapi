@@ -1,9 +1,9 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile, File
 
 from api.api_v1.deps import get_current_user
-from schemas.users import DBUser, UserOut, UserIn, DBUserUpdate
+from schemas.users import DBUser, UserOut, UserIn, UserUpdate
 from services.users import UsersService
 
 router = APIRouter()
@@ -34,6 +34,12 @@ async def get_user(id: int) -> Optional[DBUser]:
 
 
 @router.patch("/{id}/")
-async def partial_update_user(id: int, user: DBUserUpdate):
+async def partial_update_user(id: int, user: UserUpdate):
     async with UsersService() as service:
         return await service.update(id, user)
+
+
+@router.post("/{id}/uploadAvatar/", include_in_schema=False)  # use include_in_schema=False, because it breaks Swagger
+async def upload_avatar(id: int, file: UploadFile = File(...)):
+    async with UsersService() as service:
+        return await service.upload_avatar(id, file)

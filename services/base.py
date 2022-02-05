@@ -1,10 +1,10 @@
 import traceback
-from typing import TypeVar, List, Generic, Optional, Type
+from typing import TypeVar, List, Generic, Optional
 
 from fastapi import HTTPException
 from sqlalchemy.exc import DBAPIError
 
-from repositories.base import DBException, BaseRepository
+from repositories.base import DBException
 
 DBModel = TypeVar('DBModel')
 DataModel = TypeVar('DataModel')
