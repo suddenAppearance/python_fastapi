@@ -7,4 +7,4 @@ class Settings:
     SECRET_KEY = os.getenv("SECRET_KEY")
     JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
 
-    MEDIA_ROOT = "files/"
+    MEDIA_ROOT = "files"

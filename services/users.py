@@ -1,4 +1,5 @@
 import binascii
+import os
 from os import urandom
 
 from fastapi import UploadFile, HTTPException
@@ -62,7 +63,7 @@ class UsersService(BaseService[User, DBUser]):
 
         image.filename = binascii.hexlify(urandom(16)).decode() + extension
 
-        with open(get_settings().MEDIA_ROOT + image.filename, 'wb') as f:
+        with open(os.path.join(get_settings().MEDIA_ROOT, image.filename), 'wb') as f:
             f.write(await image.read())
 
         return await self.repo.update(user_id, avatar=image.filename)
