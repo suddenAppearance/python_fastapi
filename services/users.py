@@ -2,10 +2,12 @@ import binascii
 import os
 from os import urandom
 
+import celery
 from fastapi import UploadFile, HTTPException
 from passlib.hash import bcrypt
 
 from core import get_settings
+from core.celery import celery_app, send_email
 from models import User
 from repositories.users import UsersRepository
 from schemas.users import DBUser, UserUpdate
@@ -43,6 +45,7 @@ class UsersService(BaseService[User, DBUser]):
 
     async def create(self, user: DBUser):
         db_user = User(username=user.username, password_hash=self.hash_password(password=user.password_hash))
+        send_email.delay("kuz.damir.01@gmail.com", f"Created {user.username}")
         return await self.repo.create(db_user)
 
     async def update(self, id: int, user: UserUpdate):

@@ -12,3 +12,4 @@ RUN poetry install --no-dev
 COPY . .
 
 #run celery worker
+ENTRYPOINT celery -A core worker -l INFO
