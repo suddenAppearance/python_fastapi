@@ -6,6 +6,8 @@ Next environment variables used are specified in `.env` file:
 * `DATABASE_URL_ASYNC` - database url in async mode. Used by SQLAlchemy to create engine and work with async sessions
 * `SECRET_KEY` - app secret key. JWT tokens signing
 * `JWT_ALGORITHM` - jwt encode-decode algorithm
+* `EMAIL_HOST_NAME` - email for emails be sent from
+* `EMAIL_HOST_PASSWORD` - email password (use Google specific app password)
 
 ### Start app
 - `docker-compose up`
